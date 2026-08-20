@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نقشِ طرد — قمری و شمسی + طلسم</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif}
+body{margin:0;background:#fdf5eb;color:#0f3829}
+.naskh{font-family:'Noto Naskh Arabic',serif}
+.header{background:#0f3829;color:#e6c87a;padding:18px;text-align:center}
+.container{max-width:860px;margin:0 auto;padding:16px}
+.card{background:white;border-radius:18px;border:1px solid rgba(15,56,41,.1);padding:18px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,.04)}
+.input{width:100%;padding:14px;border:2px solid #e6c87a;border-radius:14px;font-size:18px;background:#fffef5;box-sizing:border-box}
+.toggle{display:flex;gap:8px;background:#0f3829;padding:6px;border-radius:999px;width:fit-content}
+.toggle button{border:none;padding:8px 22px;border-radius:999px;cursor:pointer;font-weight:700;background:transparent;color:#e6c87a}
+.toggle button.active{background:#e6c87a;color:#0f3829}
+.badge{font-size:11px;background:#fdf5eb;border:1px solid rgba(15,56,41,.1);border-radius:999px;padding:2px 10px}
+.final-box{background:linear-gradient(135deg,#0f3829,#123d2e);color:#e6c87a;border-radius:20px;padding:20px;border:1px solid rgba(230,200,122,.2)}
+.white-box{background:#fdf5eb;color:#0f3829;border-radius:16px;padding:18px;border:2px solid rgba(230,200,122,.5)}
+.tilism-line{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tilism-line img{width:58px;height:58px;object-fit:contain;background:white;border:1px solid #e6c87a;border-radius:10px;padding:3px}
+.tilism-line .fallback{width:58px;height:58px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px dashed #ccc;border-radius:10px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="header">
+<div style="font-size:22px;font-weight:700">نقشِ طرد — قمری و شمسی</div>
+<div style="font-size:12px;opacity:.7" class="naskh">غ کا نیا قاعدہ — 9 تک غ×، 9 سے زائد ایک غ + ناطق</div>
+</div>
+
+<div class="container">
+<!-- 1 -->
+<div class="card">
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><span style="width:28px;height:28px;background:#0f3829;color:#e6c87a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">۱</span><b>مقصد:</b></div>
+<input id="maq" class="input" value="سر درد طرد بحق یا شافی" oninput="recalc()">
+</div>
+
+<!-- 2 -->
+<div class="card">
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:12px"><span style="width:28px;height:28px;background:#0f3829;color:#e6c87a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">۲</span><b>نظام:</b><span class="naskh badge">ہجائی → ابجدی</span></div>
+<div class="toggle">
+<button id="btnQ" class="active" onclick="setSys('qamari')">قمری</button>
+<button id="btnS" onclick="setSys('shamsi')">شمسی</button>
+</div>
+<div style="margin-top:14px">
+<div class="naskh" style="font-size:12px;opacity:.6;margin-bottom:6px">تبدیل شدہ عبارت</div>
+<div id="converted" style="background:#fdf5eb;border:1px solid rgba(15,56,41,.1);border-radius:14px;padding:14px;font-size:22px;min-height:28px"></div>
+<div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+<div id="countBox" style="width:86px;height:86px;background:#0f3829;color:#e6c87a;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center"><div id="countNum" style="font-size:32px;font-weight:700">0</div><div class="naskh" style="font-size:11px;opacity:.7">حروف</div></div>
+<div id="letters" style="display:flex;flex-wrap:wrap;gap:6px;flex:1"></div>
+</div>
+</div>
+</div>
+
+<!-- 3 -->
+<div class="card">
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><span style="width:28px;height:28px;background:#0f3829;color:#e6c87a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px">۳</span><b>حساب و ضرب</b></div>
+<div id="breakdown" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
+<div style="background:#0f3829;color:#e6c87a;border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center"><span id="multLabel" class="naskh" style="font-size:13px;opacity:.8"></span><span id="multVal" style="font-size:20px;font-weight:700;background:#e6c87a;color:#0f3829;padding:2px 14px;border-radius:999px"></span></div>
+</div>
+
+<!-- 4 -->
+<div class="final-box">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span style="width:32px;height:32px;background:#e6c87a;color:#0f3829;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">۴</span><b style="font-size:18px">حروفِ طرد — حتمی</b><span id="ghLabel" style="margin-right:auto;font-size:10px;background:rgba(230,200,122,.15);padding:2px 10px;border-radius:999px;border:1px solid rgba(230,200,122,.2)" class="naskh"></span></div>
+<div class="white-box" style="text-align:center">
+<div class="naskh" style="font-size:11px;opacity:.5;margin-bottom:6px">تصاعدی — آحاد سے (یہی لکھنا ہے)</div>
+<div id="finalAsc" style="font-size:34px;font-weight:700;letter-spacing:.18em;line-height:1.7;background:white;border:1px solid rgba(15,56,41,.1);border-radius:12px;padding:10px"></div>
+<div id="finalDesc" class="naskh" style="font-size:11px;margin-top:8px;opacity:.5"></div>
+<div id="detail" class="naskh" style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(15,56,41,.1);font-size:12px;line-height:1.9;text-align:right"></div>
+</div>
+<div class="naskh" style="margin-top:12px;background:rgba(0,0,0,.2);border-radius:12px;padding:10px;font-size:11px;line-height:1.7">قاعدہ: N=ہزار×1000+باقی — اگر ہزار ≤9 تو غ×ہزار، اگر >9 تو ایک غ + ناطق(ہزار) + باقی۔ تصاعدی میں آحاد پہلے۔</div>
+</div>
+
+<!-- 5 - Final 3-line Naqsh -->
+<div class="card" style="border:2.5px solid #e6c87a;box-shadow:0 12px 32px rgba(230,200,122,.22);margin-top:18px">
+<div style="text-align:center;margin-bottom:14px"><span style="width:28px;height:28px;background:#0f3829;color:#e6c87a;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px">★</span> <b style="font-size:20px">حاصلہ نقش:</b></div>
+<div style="background:#fdfbf3;border:1px solid rgba(230,200,122,.4);border-radius:18px;padding:22px 10px;text-align:center">
+<div id="naqsh1" style="font-size:30px;font-weight:700;letter-spacing:.22em;line-height:1.8"></div>
+<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(230,200,122,.6),transparent);margin:14px 24px"></div>
+<div id="naqsh2" style="font-size:26px;font-weight:700;letter-spacing:.16em;line-height:1.9"></div>
+<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(230,200,122,.6),transparent);margin:14px 24px"></div>
+<div id="naqsh3" style="font-size:30px;font-weight:700;letter-spacing:.22em;line-height:1.8"></div>
+<div class="naskh" style="font-size:10px;opacity:.4;margin-top:10px">نقش کی سطر • ۳ سطری ترتیب</div>
+</div>
+</div>
+
+<!-- 6 - Tilism Box -->
+<div class="card" style="border:2.5px solid #0f3829;margin-top:18px">
+<div style="text-align:center;margin-bottom:12px"><b style="font-size:20px">تحویل طلسم</b><div class="naskh" style="font-size:11px;opacity:.6">اسی فولڈر کی تصویریں (ا.jpg، ب.jpg...) سے</div></div>
+<div style="background:#fdfbf3;border:1px solid #e6c87a;border-radius:18px;padding:18px">
+<div id="tilism1" class="tilism-line"></div>
+<div style="height:1px;background:linear-gradient(90deg,transparent,#e6c87a,transparent);margin:10px"></div>
+<div id="tilism2" class="tilism-line"></div>
+<div style="height:1px;background:linear-gradient(90deg,transparent,#e6c87a,transparent);margin:10px"></div>
+<div id="tilism3" class="tilism-line"></div>
+</div>
+<div class="naskh" style="text-align:center;font-size:11px;margin-top:10px;opacity:.6">اگر کوئی تصویر نہ ہو تو حرف نظر آئے گا — باقی ابجد کی تصاویر اسی نام سے شامل کریں (ز.jpg، س.jpg، ش.jpg... ی.jpg)</div>
+</div>
+
+</div>
+
+<footer style="background:#0f3829;color:#e6c87a;padding:14px 0;margin-top:20px"><div style="max-width:860px;margin:0 auto;padding:0 16px;display:flex;justify-content:space-between;font-size:12px"><span class="naskh" style="opacity:.7">مجذوب الباز</span><span style="font-weight:600">از: سید تلوار شاہ</span></div></footer>
+
+<script>
+const hijai=["ا","ب","ت","ث","ج","ح","خ","د","ذ","ر","ز","س","ش","ص","ض","ط","ظ","ع","غ","ف","ق","ک","ل","م","ن","و","ہ","ی"];
+const abjadi=["ا","ب","ج","د","ہ","و","ز","ح","ط","ی","ک","ل","م","ن","س","ع","ف","ص","ق","ر","ش","ت","ث","خ","ذ","ض","ظ","غ"];
+const qVals=[1,2,3,4,5,6,7,8,9,10,20,30,40,50,60,70,80,90,100,200,300,400,500,600,700,800,900,1000];
+const hijaiIdx={}; hijai.forEach((c,i)=>hijaiIdx[c]=i);
+const abjadiIdx={}; abjadi.forEach((c,i)=>abjadiIdx[c]=i);
+const qMap={}; abjadi.forEach((c,i)=>qMap[c]=qVals[i]);
+const sMap={}; hijai.forEach((c,i)=>sMap[c]=qVals[i]);
+const normMap={"ي":"ی","ى":"ی","ے":"ی","ہ":"ہ","ه":"ہ","ة":"ہ","ھ":"ہ","ک":"ک","ك":"ک","ؤ":"و","أ":"ا","إ":"ا","آ":"ا"};
+function norm(ch){return normMap[ch]||ch;}
+const qMapN={...qMap,"ه":5,"ي":10,"ك":400};
+const sMapN={...sMap,"ه":900,"ي":1000,"ك":400,"ة":900};
+const gVals=[1000,900,800,700,600,500,400,300,200,100,90,80,70,60,50,40,30,20,10,9,8,7,6,5,4,3,2,1];
+const gLettersQ=["غ","ظ","ض","ذ","خ","ث","ت","ش","ر","ق","ص","ف","ع","س","ن","م","ل","ک","ی","ط","ح","ز","و","ہ","د","ج","ب","ا"];
+function decomp(n){
+ let rem=n,res=[];
+ for(let i=0;i<gVals.length;i++){
+  let v=gVals[i];
+  while(v<=rem){res.push({value:v,letter:gLettersQ[i]}); rem-=v; if(rem===0)break;}
+  if(rem===0)break;
+ }
+ return res;
+}
+function toLetters(N){
+ const thousands=Math.floor(N/1000), rem=N%1000;
+ const remDesc=decomp(rem), remAsc=[...remDesc].sort((a,b)=>a.value-b.value);
+ if(thousands<=9){
+  const gh=Array.from({length:thousands},()=>({value:1000,letter:"غ"}));
+  return {thousands,remainder:rem,desc:[...gh,...remDesc],asc:[...remAsc,...gh],nDesc:[],nAsc:[],remDesc,remAsc,over:false};
+ } else {
+  const nDesc=decomp(thousands), nAsc=[...nDesc].sort((a,b)=>a.value-b.value);
+  return {thousands,remainder:rem,desc:[{value:1000,letter:"غ"},...nDesc,...remDesc],asc:[...remAsc,{value:1000,letter:"غ"},...nAsc],nDesc,nAsc,remDesc,remAsc,over:true};
+ }
+}
+let sys="qamari";
+function setSys(s){sys=s; document.getElementById('btnQ').className=s==='qamari'?'active':''; document.getElementById('btnS').className=s==='shamsi'?'active':''; recalc();}
+function convQ(inp){return [...inp].map(ch=>{let n=norm(ch); if(hijaiIdx[n]!==undefined) return abjadi[hijaiIdx[n]]; return ch;}).join("");}
+function convS(inp){return [...inp].map(ch=>{let n=norm(ch); if(abjadiIdx[n]!==undefined) return hijai[abjadiIdx[n]]; return ch;}).join("");}
+function tilismEl(h){
+ const w=document.createElement('div'); w.style.display='inline-block';
+ const img=document.createElement('img'); img.src=h+".jpg"; img.alt=h; img.loading="lazy";
+ img.onerror=function(){this.remove(); const d=document.createElement('div'); d.className='fallback'; d.textContent=h; w.appendChild(d);};
+ w.appendChild(img); return w;
+}
+function recalc(){
+ const maq=document.getElementById('maq').value;
+ const converted = sys==='qamari'? convQ(maq): convS(maq);
+ document.getElementById('converted').textContent=converted||"...";
+ const map=sys==='qamari'?qMapN:sMapN, mapF=sys==='qamari'?qMap:sMap;
+ let total=0,count=0,bd=[];
+ for(const ch of [...converted]){
+  if(ch.trim()==="")continue;
+  const n=norm(ch); const v=map[n]??mapF[n]??0;
+  if(v>0){count++; total+=v; bd.push({c:n,v});}
+ }
+ document.getElementById('countNum').textContent=count;
+ const lettersEl=document.getElementById('letters'); lettersEl.innerHTML="";
+ [...converted].filter(c=>c.trim()!=="").forEach(c=>{const n=norm(c); const sp=document.createElement('span'); sp.style.cssText="width:32px;height:32px;border-radius:50%;background:#fdf5eb;border:1px solid rgba(15,56,41,.1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700"; sp.textContent=n; lettersEl.appendChild(sp);});
+ const breakdownEl=document.getElementById('breakdown'); breakdownEl.innerHTML="";
+ bd.forEach(b=>{const s=document.createElement('span'); s.style.cssText="font-size:11px;background:#fdf5eb;border:1px solid rgba(15,56,41,.1);border-radius:999px;padding:2px 10px"; s.textContent=b.c+b.v; breakdownEl.appendChild(s);});
+ const mult=total*count;
+ document.getElementById('multLabel').textContent=total+" × "+count+" =";
+ document.getElementById('multVal').textContent=mult;
+ const conv=toLetters(mult);
+ const finalAscText=conv.asc.map(p=>p.letter).join(" ");
+ const finalDescText=conv.desc.map(p=>p.letter).join(" ");
+ document.getElementById('finalAsc').textContent=finalAscText||"—";
+ document.getElementById('finalDesc').textContent="تنازلی: "+(finalDescText||"—");
+ document.getElementById('ghLabel').textContent=conv.over?"غ + ناطق":"غ×"+conv.thousands;
+ let detailHtml="<div><b>تقسیم:</b> "+mult+" = "+(conv.thousands*1000)+" + "+conv.remainder+" <span style='opacity:.6'>("+conv.thousands+"×1000 + "+conv.remainder+")</span></div>";
+ if(conv.over){ detailHtml+="<div><b>غ + ناطق("+conv.thousands+"):</b> "+(conv.nDesc.map(p=>p.letter+"("+p.value+")").join(" + ")||"—")+"</div>"; detailHtml+="<div><b>باقی "+conv.remainder+":</b> "+(conv.remDesc.map(p=>p.letter+"("+p.value+")").join(" + ")||"صفر")+"</div>"; }
+ else { detailHtml+="<div><b>"+conv.remainder+" کا ناطق:</b> "+(conv.remDesc.map(p=>p.letter+"("+p.value+")").join(" + ")||"—")+"</div>"; }
+ document.getElementById('detail').innerHTML=detailHtml;
+ const spaced=[...converted].filter(c=>c.trim()!=="").join(" ");
+ document.getElementById('naqsh1').textContent=finalAscText||"—";
+ document.getElementById('naqsh2').textContent=spaced||"—";
+ document.getElementById('naqsh3').textContent=finalAscText||"—";
+ // tilism
+ const t1=document.getElementById('tilism1'); t1.innerHTML=""; conv.asc.forEach(p=>t1.appendChild(tilismEl(p.letter)));
+ const t2=document.getElementById('tilism2'); t2.innerHTML=""; [...converted].filter(c=>c.trim()!=="").forEach(c=>t2.appendChild(tilismEl(norm(c))));
+ const t3=document.getElementById('tilism3'); t3.innerHTML=""; conv.asc.forEach(p=>t3.appendChild(tilismEl(p.letter)));
+}
+recalc();
+</script>
+</body>
+</html>
